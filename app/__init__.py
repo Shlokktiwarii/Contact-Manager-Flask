@@ -15,8 +15,11 @@ def create_app(config_class: type = Config):
     def health():
         return "OK",200
     
-    @app.route("/")
+    @app.route("/test")
     def home():
         return "It works",200
+    
+    from .route import bp
+    app.register_blueprint(bp)
     
     return app 
