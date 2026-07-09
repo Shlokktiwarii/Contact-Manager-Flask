@@ -56,7 +56,12 @@ def update_contact(contact_id:int):
      return "Email must be unique",400
   return redirect(url_for("main.home"))
 
-
+@bp.post("/contacts/<int:contact_id>/delete")
+def delete_contact(contact_id:int):
+  contact = Contact.query.get_or_404(contact_id)
+  db.session.delete(contact)
+  db.session.commit()
+  return redirect(url_for('main.home'))  
    
    
 

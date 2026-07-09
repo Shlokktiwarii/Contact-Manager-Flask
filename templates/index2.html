@@ -28,6 +28,14 @@ endblock %} {% block content %}
            class="underline cursor-pointer">
             Edit
           </a>
+
+          <form 
+            method="post"
+            onsubmit="return confirm('Delete this contact?')"
+            action="{{url_for('main.delete_contact', contact_id=c.id)}}" 
+          >
+          <button class="underline">Delete</button>
+          </form>
         </td>
       </tr>
       {% else %}
