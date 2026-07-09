@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template
+from flask import Blueprint,render_template,redirect, request , url_for
 from .extensions import db
 from .models import Contact
 
@@ -10,9 +10,29 @@ def home():
     contacts = Contact.query.order_by(Contact.name.asc()).all()
     return render_template("index2.html",contacts=contacts)
 
-@bp.get("/contacts/new")
+@bp.route("/contacts/new", methods=["GET","POST"])
 def new_contact():
-    return render_template("new.html")
+    if request.method=="GET":
+      return render_template("new.html")
+    elif request.method=="POST":
+        name = (request.form.get("name") or "").strip()
+        email = (request.form.get("email") or "").strip().lower()
+        phone = (request.form.get("phone") or "").strip() or None
+
+        if not name or not email:
+          return "Name and email are required",400
+    
+        c = Contact(name=name ,email=email, phone=phone)
+        db.session.add(c)
+
+        try:
+          db.session.commit()
+        except Exception:
+          db.session.rollback()
+          return "Email must be unique",400
+        return redirect(url_for("main.home"))
+
+     
 
 @bp.get("/dev/seed")
 def dev_seed():
