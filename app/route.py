@@ -37,6 +37,26 @@ def edit_contact(contact_id: int):
    contact = Contact.query.get_or_404(contact_id)
 
    return render_template("edit.html",contact=contact)
+
+@bp.post("/contacts/<int:contact_id>/edit")
+def update_contact(contact_id:int):
+  contact = Contact.query.get_or_404(contact_id)
+   
+  contact.name = (request.form.get("name") or "").strip()
+  contact.email = (request.form.get("email") or "").strip().lower()
+  contact.phone = (request.form.get("phone") or "").strip() or None
+
+  if not contact.name or not contact.email:
+      return "Name and email are required",400
+
+  try:
+     db.session.commit()
+  except Exception:
+     db.session.rollback()
+     return "Email must be unique",400
+  return redirect(url_for("main.home"))
+
+
    
    
 
