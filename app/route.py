@@ -32,7 +32,13 @@ def new_contact():
           return "Email must be unique",400
         return redirect(url_for("main.home"))
 
-     
+@bp.get("/contacts/<int:contact_id>/edit")
+def edit_contact(contact_id: int):
+   contact = Contact.query.get_or_404(contact_id)
+
+   return render_template("edit.html",contact=contact)
+   
+   
 
 @bp.get("/dev/seed")
 def dev_seed():

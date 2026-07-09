@@ -24,7 +24,10 @@ endblock %} {% block content %}
         <td class="px-4 py-2">{{ c.email }}</td>
         <td class="px-4 py-2">{{ c.phone }}</td>
         <td class="px-4 py-2 text-right">
-          <span class="underline cursor-pointer">Edit</span>
+          <a href="{{url_for('main.edit_contact', contact_id = c.id)}}"
+           class="underline cursor-pointer">
+            Edit
+          </a>
         </td>
       </tr>
       {% else %}
